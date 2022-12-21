@@ -1,2 +1,4 @@
+server_address
+server_port
 username
 password

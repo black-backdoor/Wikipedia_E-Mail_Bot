@@ -31,19 +31,22 @@ with open("saves/receiver_emails.txt") as file:
         line = line.rstrip("\n")
         receiver_emails.append(line)
 
-#creat e-mail
-sender_email = e_mail_login[0]
-receiver_email = receiver_emails
-password = e_mail_login[1]
 
-with smtplib.SMTP_SSL("server.de", 465) as server:
-    server.login(sender_email, password)
+receiver_email = receiver_emails
+
+server_address = e_mail_login[0]
+server_port = e_mail_login[1]
+user_email = e_mail_login[2]
+password = e_mail_login[3]
+
+with smtplib.SMTP_SSL(server_address, server_port) as server:
+    server.login(user_email, password)
     message = MIMEMultipart("alternative")
     message["Subject"] = "Daily Wikipedia"
-    message["From"] = sender_email
+    message["From"] = user_email
     msg = MIMEText(daily_html, "html")
     message.attach(msg)
     for i in range(0, len(receiver_emails)):
         message["To"] = receiver_emails[i]
-        server.sendmail(sender_email, receiver_emails[i], msg.as_string())
+        server.sendmail(user_email, receiver_emails[i], msg.as_string())
         print(f"e-mail sendt to: {receiver_emails[i]}")
